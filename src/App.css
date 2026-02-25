@@ -1,7 +1,15 @@
 /* ===== GLOBAL ===== */
 
+* {
+  box-sizing: border-box;
+}
+
+html,
 body {
   margin: 0;
+  padding: 0;
+  width: 100%;
+  overflow-x: hidden;
   font-family: "Segoe UI", sans-serif;
   background: #f3f4f8;
 }
@@ -9,6 +17,7 @@ body {
 .container {
   display: flex;
   height: 100vh;
+  width: 100%;
   overflow: hidden;
 }
 
@@ -317,8 +326,15 @@ body {
 
   /* Optimize table for small screens */
   .table-responsive {
-    margin: 0 -15px;
-    padding: 0 15px;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-bottom: 15px;
+  }
+
+  .table-responsive::-webkit-scrollbar {
+    display: none;
+    /* Keep it clean */
   }
 }
 
