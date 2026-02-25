@@ -1,0 +1,173 @@
+import { useEffect, useState } from "react";
+import API from "../services/api";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  PieChart,
+  Pie,
+  Cell,
+  Legend,
+  ResponsiveContainer,
+  LineChart,
+  Line,
+  CartesianGrid
+} from "recharts";
+
+const Dashboard = () => {
+  const [admins, setAdmins] = useState([]);
+  const [supervisors, setSupervisors] = useState([]);
+  const [employees, setEmployees] = useState([]);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    const adminRes = await API.get("/admin/all-admins");
+    const supervisorRes = await API.get("/admin/all-supervisors");
+    const employeeRes = await API.get("/admin/all-employees");
+
+    setAdmins(adminRes.data.data || []);
+    setSupervisors(supervisorRes.data.data || []);
+    setEmployees(employeeRes.data.data || []);
+  };
+
+  /* ============================= */
+  /* 📊 EARNINGS CALCULATION */
+  /* ============================= */
+
+  const totalAdminEarnings = admins.reduce(
+    (sum, user) => sum + (user.earnings || 0),
+    0
+  );
+
+  const totalSupervisorEarnings = supervisors.reduce(
+    (sum, user) => sum + (user.earnings || 0),
+    0
+  );
+
+  const totalEmployeeEarnings = employees.reduce(
+    (sum, user) => sum + (user.earnings || 0),
+    0
+  );
+
+  /* ============================= */
+  /* 📊 BAR CHART DATA (EARNINGS) */
+  /* ============================= */
+
+  const earningsData = [
+    { name: "Admin", earnings: totalAdminEarnings },
+    { name: "Supervisor", earnings: totalSupervisorEarnings },
+    { name: "Employee", earnings: totalEmployeeEarnings },
+  ];
+
+  /* ============================= */
+  /* 🥧 PIE CHART DATA (COUNTS) */
+  /* ============================= */
+
+  const countData = [
+    { name: "Admins", value: admins.length },
+    { name: "Supervisors", value: supervisors.length },
+    { name: "Employees", value: employees.length },
+  ];
+
+  const COLORS = ["#6C5CE7", "#00B894", "#FD9644"];
+
+  const monthlyIncomeData = [
+    { month: "Jan", income: 4500 },
+    { month: "Feb", income: 5200 },
+    { month: "Mar", income: 4800 },
+    { month: "Apr", income: 6100 },
+    { month: "May", income: 5900 },
+    { month: "Jun", income: 7200 },
+  ];
+
+  return (
+    <div>
+      <h2 style={{ color: "black" }}>Dashboard Overview</h2>
+
+      <div className="cards">
+        <div className="card">
+          <h3>Total Admin Earnings</h3>
+          <h2>₹ {totalAdminEarnings}</h2>
+        </div>
+
+        <div className="card">
+          <h3>Total Supervisor Earnings</h3>
+          <h2>₹ {totalSupervisorEarnings}</h2>
+        </div>
+
+        <div className="card">
+          <h3>Total Employee Earnings</h3>
+          <h2>₹ {totalEmployeeEarnings}</h2>
+        </div>
+      </div>
+
+      <div className="charts">
+        {/* 📊 BAR CHART - Earnings */}
+        <div className="chart-container">
+          <h3>Earnings Overview</h3>
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart data={earningsData}>
+              <XAxis dataKey="name" />
+              <YAxis />
+              <Tooltip />
+              <Bar dataKey="earnings" fill="#6C5CE7" />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+
+        {/* 🥧 PIE CHART - User Count */}
+        <div className="chart-container">
+          <h3>User Distribution</h3>
+          <ResponsiveContainer width="100%" height={300}>
+            <PieChart>
+              <Pie
+                data={countData}
+                dataKey="value"
+                nameKey="name"
+                outerRadius={80}
+                label
+              >
+                {countData.map((entry, index) => (
+                  <Cell key={index} fill={COLORS[index % COLORS.length]} />
+                ))}
+              </Pie>
+              <Legend />
+              <Tooltip />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+
+      <div className="charts full-width-chart-container" style={{ marginTop: "30px" }}>
+        <div className="chart-container" style={{ minWidth: "100%" }}>
+          <h3>Monthly Income Trends</h3>
+          <ResponsiveContainer width="100%" height={350}>
+            <LineChart data={monthlyIncomeData}>
+              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#eee" />
+              <XAxis dataKey="month" />
+              <YAxis />
+              <Tooltip
+                contentStyle={{ borderRadius: '10px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
+              />
+              <Line
+                type="monotone"
+                dataKey="income"
+                stroke="#6C5CE7"
+                strokeWidth={3}
+                dot={{ r: 6, fill: '#6C5CE7', strokeWidth: 2, stroke: '#fff' }}
+                activeDot={{ r: 8 }}
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Dashboard;
