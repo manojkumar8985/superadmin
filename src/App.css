@@ -39,9 +39,16 @@ body {
   color: #2c3e50;
 }
 
+.app-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100%;
+}
+
 .container {
   display: flex;
-  height: 100vh;
+  flex: 1;
   width: 100%;
   overflow: hidden;
   background-color: #f8fafc;
@@ -51,7 +58,7 @@ body {
 
 .sidebar {
   width: 250px;
-  background: linear-gradient(135deg, #4f46e5 0%, #312e81 100%);
+  /* background: linear-gradient(135deg, #4f46e5 0%, #312e81 100%); */
   color: white;
   padding: 30px 20px;
   display: flex;
@@ -61,18 +68,28 @@ body {
   animation: fadeIn 0.8s ease;
 }
 
+
+/* Mobile View */
+@media (max-width: 768px) {
+  .sidebar {
+    background: white !important;
+    color: #333; /* change text color so it's visible on white */
+  }
+}
+
+
 .sidebar h2 {
   margin-bottom: 35px;
   font-weight: 700;
   font-size: 22px;
   letter-spacing: 0.5px;
   text-transform: uppercase;
-  color: #ffffff;
+  color: #1e293b;
 }
 
 .sidebar a {
   text-decoration: none;
-  color: #cbd5e1;
+  color: #64748b;
   padding: 14px 18px;
   border-radius: 10px;
   margin-bottom: 12px;
@@ -84,28 +101,63 @@ body {
 }
 
 .sidebar a:hover {
-  background: rgba(255, 255, 255, 0.15);
-  color: #ffffff;
   transform: translateX(4px);
 }
 
+.sidebar a:nth-child(2):hover {
+  background: #e0e7ff;
+  color: #4f46e5;
+}
+
+.sidebar a:nth-child(3):hover {
+  background: #fee2e2;
+  color: #ef4444;
+}
+
+.sidebar a:nth-child(4):hover {
+  background: #dcfce7;
+  color: #22c55e;
+}
+
+.sidebar a:nth-child(5):hover {
+  background: #fef08a;
+  color: #ca8a04;
+}
+
+.sidebar a:nth-child(6):hover {
+  background: #e0f2fe;
+  color: #0ea5e9;
+}
+
+.sidebar a:nth-child(7):hover {
+  background: #f3e8ff;
+  color: #a855f7;
+}
+
 .logout {
-  margin-top: auto;
-  padding: 12px;
+  margin-bottom: 12px;
+  padding: 14px 18px;
   border: none;
   border-radius: 10px;
-  background: #ef4444;
-  color: white;
-  font-weight: 600;
+  background: transparent;
+  color: #64748b;
+  font-weight: 500;
+  font-size: 15px;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+  display: flex;
+  align-items: center;
+  width: 100%;
+  text-align: left;
+  font-family: inherit;
+  box-shadow: none;
 }
 
 .logout:hover {
-  background: #dc2626;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(239, 68, 68, 0.4);
+  background: #fee2e2;
+  color: #ef4444;
+  transform: translateX(4px);
+  box-shadow: none;
 }
 
 /* ===== MAIN AREA ===== */
@@ -182,7 +234,7 @@ body {
 
 .card {
   background: white;
-  padding: 30px 25px;
+  padding: 20px 25px;
   border-radius: 20px;
   flex: 1;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);

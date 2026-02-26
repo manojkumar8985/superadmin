@@ -41,6 +41,7 @@ const Sidebar = () => {
         <Link to="/employees" onClick={closeSidebar}>Employees</Link>
         <Link to="/products" onClick={closeSidebar}>Products</Link>
         <Link to="/CreateProducts" onClick={closeSidebar}>Create Product</Link>
+      
 
         <button className="logout" onClick={() => {
           localStorage.removeItem("token");

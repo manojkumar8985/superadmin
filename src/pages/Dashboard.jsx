@@ -40,17 +40,17 @@ const Dashboard = () => {
   /* ============================= */
 
   const totalAdminEarnings = admins.reduce(
-    (sum, user) => sum + (user.earnings || 0),
+    (sum, user) => sum + (Number(user.earnings) || 0),
     0
   );
 
   const totalSupervisorEarnings = supervisors.reduce(
-    (sum, user) => sum + (user.earnings || 0),
+    (sum, user) => sum + (Number(user.earnings) || 0),
     0
   );
 
   const totalEmployeeEarnings = employees.reduce(
-    (sum, user) => sum + (user.earnings || 0),
+    (sum, user) => sum + (Number(user.earnings) || 0),
     0
   );
 
@@ -89,33 +89,34 @@ const Dashboard = () => {
   const formatCurrency = (amount) => {
     const number = Number(amount);
 
-  if (isNaN(number)) return 0; // prevent NaN
+    if (isNaN(number)) return 0; // prevent NaN
 
-  return new Intl.NumberFormat("en-IN", {
-    maximumFractionDigits: 0,
-  }).format(amount);
-};
+    return new Intl.NumberFormat("en-IN", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(number);
+  };
 
   return (
     <div>
       <h2 style={{ color: "black" }}>Dashboard Overview</h2>
 
-<div className="cards">
-  <div className="card">
-    <h3>Total Admin Earnings</h3>
-    <h2>₹ {formatCurrency(totalAdminEarnings)}</h2>
-  </div>
+      <div className="cards">
+        <div className="card" style={{ backgroundColor: "#E8E6F9" }}>
+          <h3>Total Admin Earnings</h3>
+          <h2>₹ {formatCurrency(totalAdminEarnings)}</h2>
+        </div>
 
-  <div className="card">
-    <h3>Total Supervisor Earnings</h3>
-    <h2>₹ {formatCurrency(totalSupervisorEarnings)}</h2>
-  </div>
+        <div className="card" style={{ backgroundColor: "#E6F8F4" }}>
+          <h3>Total Supervisor Earnings</h3>
+          <h2>₹ {formatCurrency(totalSupervisorEarnings)}</h2>
+        </div>
 
-  <div className="card">
-    <h3>Total Employee Earnings</h3>
-    <h2>₹ {formatCurrency(totalEmployeeEarnings)}</h2>
-  </div>
-</div>
+        <div className="card" style={{ backgroundColor: "#FFF4EB" }}>
+          <h3>Total Employee Earnings</h3>
+          <h2>₹ {formatCurrency(totalEmployeeEarnings)}</h2>
+        </div>
+      </div>
 
       <div className="charts">
         {/* 📊 BAR CHART - Earnings */}

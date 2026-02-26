@@ -26,12 +26,12 @@ const UserTable = ({ users, onDelete, type }) => {
       <table className="user-table">
         <thead>
           <tr>
-            <th>Sno</th>
-            <th>Name</th>
-            <th>Phone</th>
-            <th>Earnings</th>
-            <th>{getReferralLabel()}</th>
-            <th>Actions</th>
+            <th style={{ backgroundColor: "#6C5CE7", color: "white", padding: "12px" }}>Sno</th>
+            <th style={{ backgroundColor: "#6C5CE7", color: "white", padding: "12px" }}>Name</th>
+            <th style={{ backgroundColor: "#6C5CE7", color: "white", padding: "12px" }}>Phone</th>
+            <th style={{ backgroundColor: "#6C5CE7", color: "white", padding: "12px" }}>Earnings</th>
+            <th style={{ backgroundColor: "#6C5CE7", color: "white", padding: "12px" }}>{getReferralLabel()}</th>
+            <th style={{ backgroundColor: "#6C5CE7", color: "white", padding: "12px" }}>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -40,7 +40,7 @@ const UserTable = ({ users, onDelete, type }) => {
               key={user.user_id}
               onClick={() => handleRowClick(user.user_id)}
               style={{ cursor: "pointer", transition: "background-color 0.2s" }}
-              onMouseOver={(e) => e.currentTarget.style.backgroundColor = 'rgba(0,0,0,0.05)'}
+              onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#F0EDFF'}
               onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
             >
               <td>{index + 1}</td>
@@ -50,7 +50,7 @@ const UserTable = ({ users, onDelete, type }) => {
               <td>{getReferralCount(user)}</td>
               <td>
                 <div className="action-buttons">
-                  <button onClick={(e) => { e.stopPropagation(); onDelete(user.user_id); }} className="delete-btn" style={{ color: "white" }}>Delete</button>
+                  <button onClick={(e) => { e.stopPropagation(); onDelete(user.user_id); }} className="delete-btn" style={{ color: "white", backgroundColor: "red" }}>Delete</button>
                 </div>
               </td>
             </tr>

@@ -26,28 +26,30 @@ function App() {
 
   return (
     <Router>
-      <Toaster position="top-right" />
+      <Toaster position="top-center" />
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route
           path="/*"
           element={
             <ProtectedRoute>
-              <div className="container">
-                <Sidebar />
-                <div className="main">
-                  <Topbar />
-                  <div className="content">
-                    <Routes>
-                      <Route path="/" element={<Dashboard />} />
-                      <Route path="/CreateProducts" element={<CreateProduct />} />
-                      <Route path="/products" element={<Products />} />
-                      <Route path="/edit-product/:id" element={<EditProduct />} />
-                      <Route path="/admins" element={<Admins />} />
-                      <Route path="/supervisors" element={<Supervisors />} />
-                      <Route path="/employees" element={<Employees />} />
-                      <Route path="/user/:userId" element={<UserDetails />} />
-                    </Routes>
+              <div className="app-wrapper">
+                <Topbar />
+                <div className="container">
+                  <Sidebar />
+                  <div className="main">
+                    <div className="content">
+                      <Routes>
+                        <Route path="/" element={<Dashboard />} />
+                        <Route path="/CreateProducts" element={<CreateProduct />} />
+                        <Route path="/products" element={<Products />} />
+                        <Route path="/edit-product/:id" element={<EditProduct />} />
+                        <Route path="/admins" element={<Admins />} />
+                        <Route path="/supervisors" element={<Supervisors />} />
+                        <Route path="/employees" element={<Employees />} />
+                        <Route path="/user/:userId" element={<UserDetails />} />
+                      </Routes>
+                    </div>
                   </div>
                 </div>
               </div>
