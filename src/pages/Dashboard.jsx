@@ -85,26 +85,37 @@ const Dashboard = () => {
     { month: "Jun", income: 7200 },
   ];
 
+
+  const formatCurrency = (amount) => {
+    const number = Number(amount);
+
+  if (isNaN(number)) return 0; // prevent NaN
+
+  return new Intl.NumberFormat("en-IN", {
+    maximumFractionDigits: 0,
+  }).format(amount);
+};
+
   return (
     <div>
       <h2 style={{ color: "black" }}>Dashboard Overview</h2>
 
-      <div className="cards">
-        <div className="card">
-          <h3>Total Admin Earnings</h3>
-          <h2>₹ {totalAdminEarnings}</h2>
-        </div>
+<div className="cards">
+  <div className="card">
+    <h3>Total Admin Earnings</h3>
+    <h2>₹ {formatCurrency(totalAdminEarnings)}</h2>
+  </div>
 
-        <div className="card">
-          <h3>Total Supervisor Earnings</h3>
-          <h2>₹ {totalSupervisorEarnings}</h2>
-        </div>
+  <div className="card">
+    <h3>Total Supervisor Earnings</h3>
+    <h2>₹ {formatCurrency(totalSupervisorEarnings)}</h2>
+  </div>
 
-        <div className="card">
-          <h3>Total Employee Earnings</h3>
-          <h2>₹ {totalEmployeeEarnings}</h2>
-        </div>
-      </div>
+  <div className="card">
+    <h3>Total Employee Earnings</h3>
+    <h2>₹ {formatCurrency(totalEmployeeEarnings)}</h2>
+  </div>
+</div>
 
       <div className="charts">
         {/* 📊 BAR CHART - Earnings */}

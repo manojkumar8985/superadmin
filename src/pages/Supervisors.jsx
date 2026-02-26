@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import API from "../services/api";
 import UserTable from "../components/UserTable";
 
@@ -19,16 +20,18 @@ const Supervisors = () => {
         if (window.confirm("Are you sure you want to delete this supervisor?")) {
             try {
                 await API.delete(`/admin/delete-user/${id}`);
+                toast.success("Supervisor deleted successfully");
                 fetchSupervisors();
             } catch (error) {
                 console.error("Error deleting supervisor:", error);
+                toast.error("Failed to delete supervisor");
             }
         }
     };
 
     return (
         <div className="users-page">
-            <h2 style={{color:"black"}}>Supervisors</h2>
+            <h2 style={{ color: "black" }}>Supervisors</h2>
             <UserTable users={supervisors} onDelete={deleteUser} type="supervisor" />
         </div>
     );

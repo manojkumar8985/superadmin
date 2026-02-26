@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 import API from "../services/api";
 import "./Login.css";
 
 const Login = () => {
     const [formData, setFormData] = useState({ phone: "", password: "" });
-    const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
@@ -15,7 +15,6 @@ const Login = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setError("");
         setLoading(true);
 
         // Simulate a small delay for better UX
@@ -30,9 +29,10 @@ const Login = () => {
                 localStorage.setItem("token", "dummy-super-admin-token");
                 localStorage.setItem("user", JSON.stringify(dummyUser));
                 setLoading(false);
+                toast.success("Logged in successfully!");
                 navigate("/");
             } else {
-                setError("Invalid phone number or password.");
+                toast.error("Invalid phone number or password.");
                 setLoading(false);
             }
         }, 800);
@@ -43,8 +43,6 @@ const Login = () => {
             <div className="login-card">
                 <h2>Super Admin Login</h2>
                 <p>Welcome back! Please enter your details.</p>
-
-                {error && <div className="error-message">{error}</div>}
 
                 <form onSubmit={handleSubmit}>
                     <div className="form-group">

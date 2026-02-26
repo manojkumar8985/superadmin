@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import API from "../services/api";
 import UserTable from "../components/UserTable";
 
@@ -16,13 +17,21 @@ const Admins = () => {
   };
 
   const deleteUser = async (id) => {
-    await API.delete(`/admin/delete-user/${id}`);
-    fetchAdmins();
+    if (window.confirm("Are you sure you want to delete this admin?")) {
+      try {
+        await API.delete(`/admin/delete-user/${id}`);
+        toast.success("Admin deleted successfully");
+        fetchAdmins();
+      } catch (error) {
+        console.error("Error deleting admin:", error);
+        toast.error("Failed to delete admin");
+      }
+    }
   };
 
   return (
     <div>
-      <h2 style={{color:"black"}}>Admins</h2>
+      <h2 style={{ color: "black" }}>Admins</h2>
       <UserTable users={admins} onDelete={deleteUser} type="admin" />
     </div>
   );

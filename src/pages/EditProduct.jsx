@@ -1,9 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 import API from "../services/api";
-import "./CreateProduct.css";
+import "./CreateProduct.css"; // Reuse styling from CreateProduct
 
-const CreateProduct = () => {
+const EditProduct = () => {
+    const location = useLocation();
+    const navigate = useNavigate();
+    const { id } = useParams();
+
     const [formData, setFormData] = useState({
         name: "",
         price: "",
@@ -13,77 +18,52 @@ const CreateProduct = () => {
         category: "veg",
         adminEarningPercentage: "0",
         supervisorEarningPercentage: "0",
-        employeeEarningPercentage: "0",
+        employeeEarningPercentage: "0"
     });
-    const [images, setImages] = useState([]);
-    const [previews, setPreviews] = useState([]);
+
     const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        // Get product data passed via router state
+        if (location.state && location.state.product) {
+            const product = location.state.product;
+            setFormData({
+                name: product.name || "",
+                price: product.price || "",
+                discount: product.discount || "0",
+                quantity: product.quantity || "",
+                about: product.about || "",
+                category: product.category || "veg",
+                adminEarningPercentage: product.adminEarningPercentage || "0",
+                supervisorEarningPercentage: product.supervisorEarningPercentage || "0",
+                employeeEarningPercentage: product.employeeEarningPercentage || "0"
+            });
+        } else {
+            // If no state, we could fetch it by ID, but for now just redirect back
+            toast.error("Product details not found");
+            navigate("/products");
+        }
+    }, [location.state, navigate]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
-    const handleImageChange = (e) => {
-        const files = Array.from(e.target.files);
-        if (files.length === 0) return;
-
-        const newPreviews = files.map((file) => URL.createObjectURL(file));
-
-        setImages((prev) => [...prev, ...files]);
-        setPreviews((prev) => [...prev, ...newPreviews]);
-    };
-
-    const removeImage = (index) => {
-        // Clean up memory
-        URL.revokeObjectURL(previews[index]);
-
-        setImages((prev) => prev.filter((_, i) => i !== index));
-        setPreviews((prev) => prev.filter((_, i) => i !== index));
-    };
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
 
-        const data = new FormData();
-        Object.keys(formData).forEach((key) => {
-            data.append(key, formData[key]);
-        });
-
-        images.forEach((image) => {
-            data.append("images", image);
-        });
-
         try {
-            const response = await API.post("/product/create-product", data, {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                },
-            });
-
-            if (response.data.success) {
-                toast.success("Product created successfully!");
-                setFormData({
-                    name: "",
-                    price: "",
-                    discount: "0",
-                    quantity: "",
-                    about: "",
-                    category: "veg",
-                    adminEarningPercentage: "0",
-                    supervisorEarningPercentage: "0",
-                    employeeEarningPercentage: "0",
-                });
-                setImages([]);
-                setPreviews([]);
-            }
+            await API.put(`/product/update-product/${id}`, formData);
+            toast.success("Product updated successfully");
+            navigate("/products");
         } catch (error) {
-            console.error("Error creating product:", error);
+            console.error("Error updating product:", error);
             const errorData = error.response?.data;
             const errorMsg = typeof errorData?.message === 'string'
                 ? errorData.message
-                : (typeof errorData?.message === 'object' ? JSON.stringify(errorData.message) : "Failed to create product.");
+                : (typeof errorData?.message === 'object' ? JSON.stringify(errorData.message) : "Failed to update product.");
 
             toast.error(errorMsg);
         } finally {
@@ -94,8 +74,8 @@ const CreateProduct = () => {
     return (
         <div className="create-product-container">
             <div className="header">
-                <h2>Create New Product</h2>
-                <p>Fill in the details below to add a new product to the store.</p>
+                <h2>Edit Product</h2>
+                <p>Update the details of the product.</p>
             </div>
 
             <form onSubmit={handleSubmit} className="product-form">
@@ -107,7 +87,6 @@ const CreateProduct = () => {
                             name="name"
                             value={formData.name}
                             onChange={handleChange}
-                            placeholder="e.g. Premium Leather Jacket"
                             required
                         />
                     </div>
@@ -119,8 +98,6 @@ const CreateProduct = () => {
                             name="price"
                             value={formData.price}
                             onChange={handleChange}
-                            placeholder="0.00"
-                            step="0.01"
                             required
                         />
                     </div>
@@ -132,7 +109,6 @@ const CreateProduct = () => {
                             name="discount"
                             value={formData.discount}
                             onChange={handleChange}
-                            placeholder="0"
                             min="0"
                             max="100"
                         />
@@ -145,7 +121,6 @@ const CreateProduct = () => {
                             name="quantity"
                             value={formData.quantity}
                             onChange={handleChange}
-                            placeholder="Auto-inventory"
                             required
                         />
                     </div>
@@ -170,7 +145,6 @@ const CreateProduct = () => {
                         name="about"
                         value={formData.about}
                         onChange={handleChange}
-                        placeholder="Detailed description of the product..."
                         rows="4"
                         required
                     ></textarea>
@@ -218,55 +192,17 @@ const CreateProduct = () => {
                     </div>
                 </div>
 
-                <div className="form-group full-width">
-                    <label>Product Images</label>
-                    <div className="image-upload-wrapper">
-                        <input
-                            type="file"
-                            multiple
-                            accept="image/*"
-                            onChange={handleImageChange}
-                            id="image-input"
-                        />
-                        <label htmlFor="image-input" className="image-upload-label">
-                            <span>Click to upload images</span>
-                            <small>You can select multiple files</small>
-                        </label>
-                    </div>
-
-                    {previews.length > 0 && (
-                        <div className="previews-header">
-                            <span>Selected Images ({previews.length})</span>
-                            <button type="button" className="clear-all" onClick={() => {
-                                previews.forEach(src => URL.revokeObjectURL(src));
-                                setImages([]);
-                                setPreviews([]);
-                            }}>Clear All</button>
-                        </div>
-                    )}
-
-                    {previews.length > 0 && (
-                        <div className="image-previews">
-                            {previews.map((src, index) => (
-                                <div key={index} className="preview-card">
-                                    <img src={src} alt={`Preview ${index}`} />
-                                    <button
-                                        type="button"
-                                        className="remove-btn"
-                                        onClick={() => removeImage(index)}
-                                        title="Remove Image"
-                                    >
-                                        &times;
-                                    </button>
-                                </div>
-                            ))}
-                        </div>
-                    )}
-                </div>
-
-                <div className="form-actions">
-                    <button type="submit" className="submit-btn" disabled={loading}>
-                        {loading ? "Creating..." : "Create Product"}
+                <div className="form-actions" style={{ display: 'flex', gap: '15px' }}>
+                    <button type="submit" className="submit-btn" disabled={loading} style={{ flex: 1 }}>
+                        {loading ? "Updating..." : "Update Product"}
+                    </button>
+                    <button
+                        type="button"
+                        className="submit-btn"
+                        onClick={() => navigate('/products')}
+                        style={{ flex: 1, backgroundColor: '#6c757d', borderColor: '#6c757d' }}
+                    >
+                        Cancel
                     </button>
                 </div>
             </form>
@@ -274,4 +210,4 @@ const CreateProduct = () => {
     );
 };
 
-export default CreateProduct;
+export default EditProduct;

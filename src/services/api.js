@@ -2,6 +2,7 @@ import axios from "axios";
 
 const API = axios.create({
   baseURL: "https://single-vendor-e-commerce-node.onrender.com/",
+  // baseURL: "http://localhost:1451/",
 });
 
 API.interceptors.request.use((config) => {
