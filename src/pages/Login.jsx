@@ -29,6 +29,7 @@ const Login = () => {
                 formData.phone === "0000000000" &&
                 formData.password === "superadmin"
             ) {
+                localStorage.setItem("token", "superadmin-token");
                 toast.success("Logged in successfully!");
                 navigate("/");
             } else {
