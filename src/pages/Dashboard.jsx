@@ -20,6 +20,7 @@ const Dashboard = () => {
   const [admins, setAdmins] = useState([]);
   const [supervisors, setSupervisors] = useState([]);
   const [employees, setEmployees] = useState([]);
+  const [monthlyIncomeData, setMonthlyIncomeData] = useState([]);
 
   useEffect(() => {
     fetchData();
@@ -29,10 +30,12 @@ const Dashboard = () => {
     const adminRes = await API.get("/admin/all-admins");
     const supervisorRes = await API.get("/admin/all-supervisors");
     const employeeRes = await API.get("/admin/all-employees");
+    const incomeRes = await API.get("/admin/monthly-income");
 
     setAdmins(adminRes.data.data || []);
     setSupervisors(supervisorRes.data.data || []);
     setEmployees(employeeRes.data.data || []);
+    setMonthlyIncomeData(incomeRes.data.data || []);
   };
 
   /* ============================= */
@@ -76,14 +79,7 @@ const Dashboard = () => {
 
   const COLORS = ["#6C5CE7", "#00B894", "#FD9644"];
 
-  const monthlyIncomeData = [
-    { month: "Jan", income: 4500 },
-    { month: "Feb", income: 5200 },
-    { month: "Mar", income: 4800 },
-    { month: "Apr", income: 6100 },
-    { month: "May", income: 5900 },
-    { month: "Jun", income: 7200 },
-  ];
+
 
 
   const formatCurrency = (amount) => {
