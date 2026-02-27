@@ -41,13 +41,48 @@ const Sidebar = () => {
         <Link to="/employees" onClick={closeSidebar}>Employees</Link>
         <Link to="/products" onClick={closeSidebar}>Products</Link>
         <Link to="/CreateProducts" onClick={closeSidebar}>Create Product</Link>
-      
+
 
         <button className="logout" onClick={() => {
           localStorage.removeItem("token");
           localStorage.removeItem("user");
           window.location.href = "/login";
         }}>Sign Out</button>
+
+        <div
+  style={{
+    marginTop: "auto",
+    padding: "20px",
+    borderTop: "1px solid #e5e5e5",
+  }}
+>
+  <div
+    style={{
+      fontSize: "12px",
+      letterSpacing: "1px",
+      color: "#999",
+      marginLeft: "20px",
+      marginBottom: "6px",
+    }}
+  >
+    POWERED BY
+  </div>
+
+  <a
+    href="https://www.invtechnologies.in/"
+    target="_blank"
+    rel="noopener noreferrer"
+    style={{
+      color: "#1a73e8",
+      textDecoration: "none",
+      fontWeight: "600",
+      fontSize: "15px",
+      whiteSpace: "nowrap",   // 👈 THIS prevents line break
+    }}
+  >
+    INV Technologies
+  </a>
+</div>
       </div>
     </>
   );
